@@ -9,7 +9,7 @@ const getBusesInfo = (stopNum, busNums) => {
     getStopInfo(stopNum).then((buses) => {
       const filteredBuses = [];
       for (let i = 0; i < buses.length; i++) {
-        if (busNums.includes(buses[i].route)) {
+        if (busNums.includes(buses[i].num)) {
           filteredBuses.push(buses[i]);
         }
       }
@@ -29,12 +29,12 @@ const getStopInfo = (stopNum) => {
     if (_.isUndefined(stopNum)) {
       reject(new Error('please supply a stop number.'));
     } else {
-      tabletojson.converturl(`${url}${stopNum}`).then(tablesAsJson => {
+      tabletojson.convertUrl(`${url}${stopNum}`).then(tablesAsJson => {
         if (tablesAsJson.length === 2) {
           reject(new Error('stop number doesn\'t exist.'));
         } else {
           const buses = [];
-          if (_.isundefined(tablesAsJson[3][0]['0'])) {
+          if (_.isUndefined(tablesAsJson[3][0]['0'])) {
             for (let i = 0; i < 5 && i < tablesAsJson[3].length; i++) {
               let due = tablesAsJson[3][i]['Expected Time'];
               if (due === 'Due') {
@@ -58,16 +58,17 @@ const getStopInfo = (stopNum) => {
 
 const stopAddress = (stopNum) => {
   return new Promise((resolve, reject) => {
-    if (_.isundefined(stopNum)) {
-      reject(new Error('please supply a stop number.'));
+    if (_.isUndefined(stopNum)) {
+      reject(new Error('Please supply a stop number.'));
     } else {
-      tabletojson.converturl(`url${stopNum}`).then(tablesasjson => {
-        if (tablesasjson.length === 2) {
-          reject(new Error('stop number doesn\'t exist.'));
+      tabletojson.convertUrl(`${url}${stopNum}`).then(tablesAsJson => {
+        if (tablesAsJson.length === 2) {
+          reject(new Error('Stop number doesn\'t exist.'));
         } else {
-          if (_.isUndefined(tablesasjson[3][0]['0'])) {
-            resolve(tablesasjson[2][0]['stop address']);
+          if (_.isUndefined(tablesAsJson[3][0]['0'])) {
+            resolve(tablesAsJson[2][0]['Stop Address']);
           }
+          else reject(new Error('Stop number doesn\'t exist.'));
         }
       });
     }
