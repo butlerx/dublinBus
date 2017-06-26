@@ -1,0 +1,26 @@
+{
+  "name": "dublinBus.js",
+  "version": "1.0.0",
+  "description": "Library for querying Dublin bus realtime info",
+  "main": "app.js",
+  "author": "butlerx",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/butlerx/dublinBus"
+  },
+  "bugs": {
+    "url": "http://github.com/butlerx/dublinBus/issues"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "tabletojson": "^0.6.0"
+  }
+}
