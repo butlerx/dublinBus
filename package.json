@@ -1,6 +1,6 @@
 {
   "name": "dublin-bus.js",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Library for querying Dublin bus realtime info",
   "main": "app.js",
   "author": "butlerx",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "tabletojson": "^0.6.0"
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
   }
 }
