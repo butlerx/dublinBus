@@ -12,7 +12,7 @@ yarn add dublin-bus.js
 
 ```javascript
 'use strict';
-const dBus = require('.');
+const dBus = require('dublin-bus.js');
 
 dBus.stopAddress(7602).then(address => {
   console.log(address);
@@ -20,8 +20,8 @@ dBus.stopAddress(7602).then(address => {
   console.log(reason);
 });
 
-dBus.getStopInfo(7602).then(buses => {
-  console.log(buses);
+dBus.getStopInfo(1344).then(info => {
+  console.log(`stop: ${info.stop}'s buses: ${JSON.stringify(info.buses)}`);
 }).catch(reason => {
   console.log(reason);
 });

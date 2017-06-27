@@ -1,82 +1,54 @@
 'use strict';
 
-const _ = require('lodash');
-const tabletojson = require('tabletojson');
-const url = 'http://www.dublinbus.ie/en/RTPI/Sources-of-Real-Time-Information/?searchtype=view&searchquery=';
+const realTime = require('./lib/realTime');
+const stop = require('./lib/stop');
 
-const getBusesInfo = (stopNum, busNums) => {
+const getStopInfoForBuses = (stopNum, busNums) => {
   return new Promise((resolve, reject) => {
-    getStopInfo(stopNum).then((buses) => {
+    getStopInfo(stopNum).then(({stop, buses}) => {
       const filteredBuses = [];
       for (let i = 0; i < buses.length; i++) {
-        if (busNums.includes(buses[i].num)) {
+        if (busNums.includes(buses[i].route)) {
           filteredBuses.push(buses[i]);
         }
       }
       if (filteredBuses.length > 0) {
-        resolve(filteredBuses);
+        resolve({
+          stop : stop,
+          buses: filteredBuses,
+        });
       } else {
         reject(new Error('No buses for specified routes at this stop.'));
       }
-    }).catch((err) => {
-      reject(err);
-    });
+    }).catch(err => reject(err));
   });
 };
 
-const getStopInfo = (stopNum) => {
+const getStopInfo = (stopNum, length) => {
   return new Promise((resolve, reject) => {
-    if (_.isUndefined(stopNum)) {
-      reject(new Error('please supply a stop number.'));
-    } else {
-      tabletojson.convertUrl(`${url}${stopNum}`).then(tablesAsJson => {
-        if (tablesAsJson.length === 2) {
-          reject(new Error('stop number doesn\'t exist.'));
-        } else {
-          const buses = [];
-          if (_.isUndefined(tablesAsJson[3][0]['0'])) {
-            for (let i = 0; i < 5 && i < tablesAsJson[3].length; i++) {
-              let due = tablesAsJson[3][i]['Expected Time'];
-              if (due === 'Due') {
-                due = 0;
-              }
-              buses.push({
-                num     : parseInt(tablesAsJson[3][i]['Route'], 10),
-                route   : tablesAsJson[3][i]['Destination'],
-                expected: parseInt(due, 10),
-              });
-            }
-            resolve(buses);
-          } else {
-            reject(new Error('No realtime information is currently available for this stop.'));
-          }
-        }
-      });
-    }
+    realTime.getInfo(stopNum, length).then(buses => {
+      stop.getInfo(stopNum).then(({address}) => resolve({
+        stop : address,
+        buses: buses,
+      }));
+    }).catch(err => reject(err));
   });
 };
 
-const stopAddress = (stopNum) => {
+const getBusesInfo = (stopNum, busNums) => {
   return new Promise((resolve, reject) => {
-    if (_.isUndefined(stopNum)) {
-      reject(new Error('Please supply a stop number.'));
-    } else {
-      tabletojson.convertUrl(`${url}${stopNum}`).then(tablesAsJson => {
-        if (tablesAsJson.length === 2) {
-          reject(new Error('Stop number doesn\'t exist.'));
-        } else {
-          if (_.isUndefined(tablesAsJson[3][0]['0'])) {
-            resolve(tablesAsJson[2][0]['Stop Address']);
-          }
-          else reject(new Error('Stop number doesn\'t exist.'));
-        }
-      });
-    }
+    getStopInfoForBuses(stopNum, busNums).then(({buses}) => resolve(buses))
+      .catch(err => reject(err));
   });
 };
 
-exports = module.exports = {
-  stopAddress,
+module.exports = {
   getStopInfo,
   getBusesInfo,
+  realTime   : realTime.getInfo,
+  realTimeRaw: realTime.getInfoRaw,
+  stopInfo   : stop.getInfo,
+  stopInfoRaw: stop.getInfoRaw,
+  stopAddress: stop.getAddress,
+  stopBuses  : stop.getBuses,
 };
