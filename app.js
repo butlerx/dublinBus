@@ -3,44 +3,34 @@
 const realTime = require('./lib/realTime');
 const stop = require('./lib/stop');
 
-const getStopInfoForBuses = (stopNum, busNums) => {
-  return new Promise((resolve, reject) => {
-    getStopInfo(stopNum).then(({stop, buses}) => {
-      const filteredBuses = [];
-      for (let i = 0; i < buses.length; i++) {
-        if (busNums.includes(buses[i].route)) {
-          filteredBuses.push(buses[i]);
-        }
-      }
-      if (filteredBuses.length > 0) {
-        resolve({
-          stop : stop,
-          buses: filteredBuses,
-        });
-      } else {
-        reject(new Error('No buses for specified routes at this stop.'));
-      }
-    }).catch(err => reject(err));
-  });
-};
+const getStopInfoForBuses = (stopNum, busNums) => new Promise((resolve, reject) => {
+  getStopInfo(stopNum).then(({stop, buses}) => {
+    const filteredBuses = [];
+    buses.forEach(bus => {
+      if (busNums.includes(bus.route)) filteredBuses.push(bus);
+    });
+    if (filteredBuses.length > 0) resolve({
+      stop : stop,
+      buses: filteredBuses,
+    });
+    reject(new Error('No buses for specified routes at this stop.'));
+  }).catch(reject);
+});
 
-const getStopInfo = (stopNum, length) => {
-  return new Promise((resolve, reject) => {
-    realTime.getInfo(stopNum, length).then(buses => {
-      stop.getInfo(stopNum).then(({address}) => resolve({
-        stop : address,
-        buses: buses,
-      }));
-    }).catch(err => reject(err));
-  });
-};
+const getStopInfo = (stopNum, length) => new Promise((resolve, reject) => {
+  realTime.getInfo(stopNum, length).then(buses => {
+    stop.getInfo(stopNum).then(({address}) => resolve({
+      stop : address,
+      buses: buses,
+    }));
+  }).catch(reject);
+});
 
-const getBusesInfo = (stopNum, busNums) => {
-  return new Promise((resolve, reject) => {
-    getStopInfoForBuses(stopNum, busNums).then(({buses}) => resolve(buses))
-      .catch(err => reject(err));
-  });
-};
+const getBusesInfo = (stopNum, busNums) => new Promise((resolve, reject) => {
+  getStopInfoForBuses(stopNum, busNums)
+    .then(({buses}) => resolve(buses))
+    .catch(reject);
+});
 
 module.exports = {
   getStopInfo,
