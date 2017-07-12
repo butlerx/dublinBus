@@ -1,15 +1,9 @@
-
-
-const _Promise = typeof Promise === 'undefined' ? require('es6-promise').Promise : Promise;
-
 const isUndefined = require('lodash/isUndefined');
 const request = require('request-promise-native');
+const { url } = require('./config');
 
-let _require = require('./config'),
-  url = _require.url;
-
-const get = function get(endpoint, stopNum) {
-  return new _Promise((resolve, reject) => {
+const get = (endpoint, stopNum) =>
+  new Promise((resolve, reject) => {
     if (isUndefined(stopNum)) reject(new Error('Please supply a stop number.'));
     const options = {
       uri    : `${url}/${endpoint}?stopid=${stopNum}&format=json`,
@@ -20,15 +14,11 @@ const get = function get(endpoint, stopNum) {
     };
 
     request(options)
-      .then(_ref => {
-        const results = _ref.results;
-
+      .then(({ results }) => {
         if (results.length === 0) reject(new Error("Stop number doesn't exist."));
         resolve(results);
       })
       .catch(reject);
   });
-};
 
 module.exports = get;
-// # sourceMappingURL=get.js.map
