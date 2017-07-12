@@ -1,4 +1,5 @@
 docs
+example.js
 .babelrc
 .eslint*
 .flow*

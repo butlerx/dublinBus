@@ -1,8 +1,8 @@
 {
   "name": "dublin-bus.js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Library for querying Dublin bus realtime info",
-  "main": "app.js",
+  "main": "lib/app.js",
   "author": "butlerx",
   "license": "MIT",
   "repository": {
@@ -13,14 +13,13 @@
     "url": "http://github.com/butlerx/dublinBus/issues"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint src",
     "build": "babel src --source-maps --out-dir lib",
     "build:watch": "babel src --watch --source-maps --out-dir lib",
     "precommit": "lint-staged",
     "prepublish": "yarn run build",
     "format": "prettier-eslint --write src/**/*.js"
   },
-  "main": "lib/app.js",
   "lint-staged": {
     "*.js": [
       "prettier-eslint --write",
