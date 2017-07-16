@@ -1,5 +1,5 @@
-const realTime = require('./realTime');
-const stopLib = require('./stop');
+import realTime from './realTime';
+import stopLib from './stop';
 
 const getStopInfo = (stopNum, length) =>
   new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ const getBusesInfo = (stopNum, busNums) =>
     getStopInfoForBuses(stopNum, busNums).then(({ buses }) => resolve(buses)).catch(reject);
   });
 
-module.exports = {
+export default {
   getStopInfo,
   getBusesInfo,
   realTime   : realTime.getInfo,

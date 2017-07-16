@@ -1,6 +1,6 @@
-const isUndefined = require('lodash/isUndefined');
-const request = require('request-promise-native');
-const { url } = require('./config');
+import isUndefined from 'lodash/isUndefined';
+import request from 'request-promise-native';
+import { url } from './config';
 
 const get = (endpoint, stopNum) =>
   new Promise((resolve, reject) => {
@@ -21,4 +21,4 @@ const get = (endpoint, stopNum) =>
       .catch(reject);
   });
 
-module.exports = get;
+export default get;

@@ -1,4 +1,4 @@
-const get = require('./get');
+import get from './get';
 
 const getInfoRaw = stopNum => get('busstopinformation', stopNum);
 
@@ -24,7 +24,7 @@ const getBuses = stopNum =>
     getInfoRaw(stopNum).then(results => resolve(results[0].operators.routes)).catch(reject);
   });
 
-module.exports = {
+export default {
   getInfoRaw,
   getInfo,
   getAddress,

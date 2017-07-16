@@ -1,4 +1,4 @@
-const get = require('./get');
+import get from './get';
 
 const getInfoRaw = stopNum => get('realtimebusinformation', stopNum);
 
@@ -7,13 +7,13 @@ const getInfo = (stop, length) =>
     getInfoRaw(stop)
       .then(results => {
         const buses = [];
-        results.forEach(bus =>
+        results.forEach(({ route, destination, origin, arrivaldatetime, duetime }) =>
           buses.push({
-            route      : parseInt(bus.route, 10),
-            destination: bus.destination,
-            origin     : bus.origin,
-            expected   : bus.arrivaldatetime.split(' ')[1],
-            due        : bus.duetime,
+            route   : parseInt(route, 10),
+            expected: arrivaldatetime.split(' ')[1],
+            due     : duetime,
+            destination,
+            origin,
           }),
         );
         resolve(buses.slice(0, length || 5));
@@ -21,7 +21,7 @@ const getInfo = (stop, length) =>
       .catch(reject);
   });
 
-module.exports = {
+export default {
   getInfoRaw,
   getInfo,
 };
