@@ -1,4 +1,4 @@
-const dBus = require('./lib');
+const dBus = require('.');
 
 const printBuses = ({ stop, buses }) => {
   if (stop) console.log(`Stop address: ${stop}`); // eslint-disable-line no-console
