@@ -1,8 +1,8 @@
 import get from './get';
 
-const getInfoRaw = stopNum => get('busstopinformation', stopNum);
+export const getInfoRaw = stopNum => get('busstopinformation', stopNum);
 
-const getInfo = stopNum =>
+export const getInfo = stopNum =>
   new Promise((resolve, reject) => {
     getInfoRaw(stopNum)
       .then(results => {
@@ -14,12 +14,12 @@ const getInfo = stopNum =>
       .catch(reject);
   });
 
-const getAddress = stopNum =>
+export const getAddress = stopNum =>
   new Promise((resolve, reject) => {
     getInfoRaw(stopNum).then(results => resolve(results[0].fullname)).catch(reject);
   });
 
-const getBuses = stopNum =>
+export const getBuses = stopNum =>
   new Promise((resolve, reject) => {
     getInfoRaw(stopNum).then(results => resolve(results[0].operators.routes)).catch(reject);
   });

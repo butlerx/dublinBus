@@ -1,7 +1,7 @@
 import realTime from './realTime';
 import stopLib from './stop';
 
-const getStopInfo = (stopNum, length) =>
+export const getStopInfo = (stopNum, length) =>
   new Promise((resolve, reject) => {
     realTime
       .getInfo(stopNum, length)
@@ -16,7 +16,7 @@ const getStopInfo = (stopNum, length) =>
       .catch(reject);
   });
 
-const getStopInfoForBuses = (stopNum, busNums) =>
+export const getStopInfoForBuses = (stopNum, busNums) =>
   new Promise((resolve, reject) => {
     getStopInfo(stopNum)
       .then(({ stop, buses }) => {
@@ -30,7 +30,7 @@ const getStopInfoForBuses = (stopNum, busNums) =>
       .catch(reject);
   });
 
-const getBusesInfo = (stopNum, busNums) =>
+export const getBusesInfo = (stopNum, busNums) =>
   new Promise((resolve, reject) => {
     getStopInfoForBuses(stopNum, busNums).then(({ buses }) => resolve(buses)).catch(reject);
   });
@@ -38,6 +38,7 @@ const getBusesInfo = (stopNum, busNums) =>
 export default {
   getStopInfo,
   getBusesInfo,
+  getStopInfoForBuses,
   realTime   : realTime.getInfo,
   realTimeRaw: realTime.getInfoRaw,
   stopInfo   : stopLib.getInfo,
