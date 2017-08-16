@@ -2,9 +2,9 @@ import isUndefined from 'lodash/isUndefined';
 import request from 'request-promise-native';
 import { url } from './config';
 
-const get = (endpoint, stopNum) =>
+export default (endpoint, stopNum) =>
   new Promise((resolve, reject) => {
-    if (isUndefined(stopNum)) reject(new Error('Please supply a stop number.'));
+    if (isUndefined(stopNum)) reject(new Error('Please supply a stop number'));
     const options = {
       uri    : `${url}/${endpoint}?stopid=${stopNum}&format=json`,
       headers: {
@@ -15,10 +15,8 @@ const get = (endpoint, stopNum) =>
 
     request(options)
       .then(({ results }) => {
-        if (results.length === 0) reject(new Error("Stop number doesn't exist."));
+        if (results.length === 0) reject(new Error("Stop number doesn't exist"));
         resolve(results);
       })
       .catch(reject);
   });
-
-export default get;

@@ -1,7 +1,7 @@
 import realTime from './realTime';
 import stopLib from './stop';
 
-export const getStopInfo = (stopNum, length) =>
+const getStopInfo = (stopNum, length) =>
   new Promise((resolve, reject) => {
     realTime
       .getInfo(stopNum, length)
@@ -16,21 +16,18 @@ export const getStopInfo = (stopNum, length) =>
       .catch(reject);
   });
 
-export const getStopInfoForBuses = (stopNum, busNums) =>
+const getStopInfoForBuses = (stopNum, busNums) =>
   new Promise((resolve, reject) => {
-    getStopInfo(stopNum)
+    getStopInfo(stopNum, 20)
       .then(({ stop, buses }) => {
-        const filteredBuses = [];
-        buses.forEach(bus => {
-          if (busNums.includes(bus.route)) filteredBuses.push(bus);
-        });
-        if (filteredBuses.length > 0) resolve({ stop, buses: filteredBuses });
-        reject(new Error('No buses for specified routes at this stop.'));
+        const filteredBuses = buses.filter(bus => busNums.includes(bus.route));
+        if (filteredBuses) resolve({ stop, buses: filteredBuses });
+        reject(new Error('No buses for specified routes at this stop'));
       })
       .catch(reject);
   });
 
-export const getBusesInfo = (stopNum, busNums) =>
+const getBusesInfo = (stopNum, busNums) =>
   new Promise((resolve, reject) => {
     getStopInfoForBuses(stopNum, busNums).then(({ buses }) => resolve(buses)).catch(reject);
   });

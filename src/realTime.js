@@ -1,8 +1,8 @@
 import get from './get';
 
-export const getInfoRaw = stopNum => get('realtimebusinformation', stopNum);
+const getInfoRaw = stopNum => get('realtimebusinformation', stopNum);
 
-export const getInfo = (stop, length) =>
+const getInfo = (stop, length) =>
   new Promise((resolve, reject) => {
     getInfoRaw(stop)
       .then(results => {
