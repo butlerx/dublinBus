@@ -1,4 +1,4 @@
-import isUndefined from 'lodash/isUndefined';
+import { isUndefined } from 'lodash';
 import request from 'request-promise-native';
 import { url } from './config';
 
@@ -15,7 +15,9 @@ export default (endpoint, stopNum) =>
 
     request(options)
       .then(({ results }) => {
-        if (results.length === 0) reject(new Error("Stop number doesn't exist"));
+        if (results.length === 0) {
+          reject(new Error("Stop number doesn't exist"));
+        }
         resolve(results);
       })
       .catch(reject);
