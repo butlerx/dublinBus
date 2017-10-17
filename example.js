@@ -1,4 +1,4 @@
-const dBus = require('./lib/app');
+const dBus = require('./lib');
 
 const printBuses = ({ stop, buses }) => {
   console.log(`Stop address: ${stop}`);
@@ -13,7 +13,7 @@ const printBuses = ({ stop, buses }) => {
   });
 };
 
-const cmdArgs = [1344, 16];
+const cmdArgs = ['1344', '16'];
 dBus
   .getStopInfoForBuses(cmdArgs[0], cmdArgs.splice(1))
   .then(info => printBuses(info))

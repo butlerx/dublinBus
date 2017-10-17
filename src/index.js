@@ -20,7 +20,7 @@ const getStopInfoForBuses = (stopNum, busNums) =>
   new Promise((resolve, reject) => {
     getStopInfo(stopNum, 20)
       .then(({ stop, buses }) => {
-        const filteredBuses = buses.filter(bus => busNums.includes(bus.route));
+        const filteredBuses = buses.filter(bus => busNums.map(Number).includes(bus.route));
         if (filteredBuses) resolve({ stop, buses: filteredBuses });
         reject(new Error('No buses for specified routes at this stop'));
       })
