@@ -1,6 +1,6 @@
 {
   "name": "dublin-bus.js",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Library for querying Dublin bus realtime info",
   "main": "lib/index.js",
   "author": "butlerx",

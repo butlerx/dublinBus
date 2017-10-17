@@ -3,26 +3,14 @@ import get from './get';
 const getInfoRaw = stopNum => get('busstopinformation', stopNum);
 
 const getInfo = stopNum =>
-  new Promise((resolve, reject) => {
-    getInfoRaw(stopNum)
-      .then(results => {
-        resolve({
-          address: results[0].fullname,
-          buses  : results[0].operators.routes,
-        });
-      })
-      .catch(reject);
-  });
+  getInfoRaw(stopNum).then(results => ({
+    address: results[0].fullname,
+    buses  : results[0].operators.routes,
+  }));
 
-const getAddress = stopNum =>
-  new Promise((resolve, reject) => {
-    getInfoRaw(stopNum).then(results => resolve(results[0].fullname)).catch(reject);
-  });
+const getAddress = stopNum => getInfoRaw(stopNum).then(results => results[0].fullname);
 
-const getBuses = stopNum =>
-  new Promise((resolve, reject) => {
-    getInfoRaw(stopNum).then(results => resolve(results[0].operators.routes)).catch(reject);
-  });
+const getBuses = stopNum => getInfoRaw(stopNum).then(results => results[0].operators.routes);
 
 export default {
   getInfoRaw,
