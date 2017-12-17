@@ -21,10 +21,10 @@ const sorry = reason => console.log(`Sorry, ${reason}.`); // eslint-disable-line
 
 (async () => {
   try {
-    printBuses({ stop: await dBus.stopAddress(1344) });
+    printBuses({ stop: await dBus.stop.address(1344) });
     printBuses({ buses: await dBus.getBusesInfo(1344, [16, 9]) });
     printBuses(await dBus.getStopInfo(1344));
-    printBuses({ buses: await dBus.realTime(1344) });
+    printBuses({ buses: await dBus.realTime.info(1344) });
   } catch (err) {
     sorry(err);
   }
