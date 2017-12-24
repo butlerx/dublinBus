@@ -1,4 +1,4 @@
-const dBus = require('.');
+const dublinBus = require('.');
 
 const printBuses = ({ stop, buses }) => {
   if (stop) console.log(`Stop address: ${stop}`); // eslint-disable-line no-console
@@ -21,10 +21,10 @@ const sorry = reason => console.log(`Sorry, ${reason}.`); // eslint-disable-line
 
 (async () => {
   try {
-    printBuses({ stop: await dBus.stop.address(1344) });
-    printBuses({ buses: await dBus.getBusesInfo(1344, [16, 9]) });
-    printBuses(await dBus.getStopInfo(1344));
-    printBuses({ buses: await dBus.realTime.info(1344) });
+    printBuses({ stop: await dublinBus.stop.address(1344) });
+    printBuses({ buses: await dublinBus.getBusesInfo(1344, [16, 9]) });
+    printBuses(await dublinBus.getStopInfo(1344));
+    printBuses({ buses: await dublinBus.realTime.info(1344) });
   } catch (err) {
     sorry(err);
   }
