@@ -1,39 +1,20 @@
 import { isUndefined } from 'lodash';
+import moment from 'moment';
 import get from './get';
-
-function getDay(num) {
-  switch (num) {
-    case 0:
-      return 'Sunday';
-    case 1:
-      return 'Monday';
-    case 2:
-      return 'Tuesday';
-    case 3:
-      return 'Wednesday';
-    case 4:
-      return 'Thursday';
-    case 5:
-      return 'Friday';
-    case 6:
-      return 'Saturday';
-    default:
-      return '';
-  }
-}
 
 export default class TimeTable {
   static async raw({ stop, route, date, length, type }) {
     if (isUndefined(stop)) throw new Error('Please supply a stop number.');
     if (isUndefined(type)) throw new Error('Please supply TimeTable type');
+    if (isUndefined(route)) throw new Error('Please supply route number');
     const routeid = isUndefined(route) ? '' : `&routeid=${route}`;
     let datetime;
-    if (isUndefined(date) && type === 'day') {
+    if (!isUndefined(date) && type === 'day') {
       datetime = `&type=day&datetime=${date}`;
     } else if (type === 'day') {
       datetime = '&type=day';
     } else if (type === 'week') {
-      datetime = '&type=day';
+      datetime = '&type=week';
     }
     return get(
       'timetableinformation',
@@ -41,25 +22,30 @@ export default class TimeTable {
     );
   }
 
-  static day({ stop, route, date, length }) {
-    return this.raw({ stop, route, date, length, type: 'day' }).then(results =>
+  static day(stop, routeNum, { date, length } = { date: undefined, length: 5 }) {
+    return this.raw({
+      stop,
+      route: routeNum,
+      date,
+      length,
+      type: 'day',
+    }).then(results =>
       results.map(({ arrivaldatetime, destination, operator, route }) => ({
-        route: parseInt(route, 10),
-        expected: new Date(arrivaldatetime),
+        route,
+        expected: moment(arrivaldatetime, 'DD/MM/YYYY HH:mm:ss').toDate(),
         destination,
         operator,
       })),
     );
   }
 
-  static async week(stop, routeNum) {
-    if (isUndefined(routeNum)) throw new Error('Please supply route number');
-    return this.raw({ stop, route: routeNum, type: 'week' }).then(results =>
+  static week(stop, route) {
+    return this.raw({ stop, route, type: 'week' }).then(results =>
       results.map(({ startdayofweek, enddayofweek, destination, departures }) => ({
-        start: getDay(startdayofweek),
-        end: getDay(enddayofweek),
+        start: startdayofweek,
+        end: enddayofweek,
         destination,
-        departures: departures.map(time => new Date(time)),
+        departures,
       })),
     );
   }
