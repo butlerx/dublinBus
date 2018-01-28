@@ -1,8 +1,8 @@
 import request from 'request-promise-native';
 import { url } from './config';
 
-export default function get(endpoint, args) {
-  return request({
+export default (endpoint, args) =>
+  request({
     headers: {
       'User-Agent': 'dublin-bus.js',
     },
@@ -12,4 +12,3 @@ export default function get(endpoint, args) {
     if (results.length === 0) throw new Error("Info doesn't exist.");
     return results;
   });
-}

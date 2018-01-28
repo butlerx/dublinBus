@@ -1,7 +1,7 @@
 import get from './get';
 
 export default class Route {
-  static async info(route, operator = 'bac') {
+  static info(route, operator = 'bac') {
     return get('routeinformation', `routeid=${route}&operator=${operator}`).then(results =>
       results.map(({ origin, destination, stops }) => ({
         origin,

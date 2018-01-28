@@ -2,6 +2,24 @@ import { isUndefined, flatten } from 'lodash';
 import moment from 'moment';
 import get from './get';
 
+const format = ({
+  route,
+  destination,
+  origin,
+  arrivaldatetime,
+  duetime,
+  operator,
+  additionalinformation,
+}) => ({
+  route,
+  expected: moment(arrivaldatetime, 'DD/MM/YYYY HH:mm:ss').toDate(),
+  due: parseInt(duetime, 10),
+  destination,
+  origin,
+  operator,
+  info: additionalinformation,
+});
+
 export default class RealTime {
   static async raw({ stop, route, length }) {
     if (isUndefined(stop)) throw new Error('Please supply a stop number.');
@@ -10,23 +28,6 @@ export default class RealTime {
   }
 
   static info({ stop, routes, length }) {
-    const format = ({
-      route,
-      destination,
-      origin,
-      arrivaldatetime,
-      duetime,
-      operator,
-      additionalinformation,
-    }) => ({
-      route,
-      expected: moment(arrivaldatetime, 'DD/MM/YYYY HH:mm:ss').toDate(),
-      due: parseInt(duetime, 10),
-      destination,
-      origin,
-      operator,
-      info: additionalinformation,
-    });
     if (isUndefined(routes)) {
       return this.raw({ stop, length }).then(results => results.map(format));
     }
