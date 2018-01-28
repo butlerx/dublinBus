@@ -3,14 +3,14 @@ import moment from 'moment';
 import get from './get';
 
 export default class TimeTable {
-  static async raw({ stop, route, date, length, type }) {
+  static async raw({ stop, route, time, length, type }) {
     if (isUndefined(stop)) throw new Error('Please supply a stop number.');
     if (isUndefined(type)) throw new Error('Please supply TimeTable type');
     if (isUndefined(route)) throw new Error('Please supply route number');
     const routeid = isUndefined(route) ? '' : `&routeid=${route}`;
     let datetime;
-    if (!isUndefined(date) && type === 'day') {
-      datetime = `&type=day&datetime=${date}`;
+    if (!isUndefined(time) && type === 'day') {
+      datetime = `&type=day&datetime=${moment(time, 'HH:mm').format('HH:mm:ss')}`;
     } else if (type === 'day') {
       datetime = '&type=day';
     } else if (type === 'week') {
@@ -22,11 +22,11 @@ export default class TimeTable {
     );
   }
 
-  static day(stop, routeNum, { date, length } = { date: undefined, length: 5 }) {
+  static day(stop, routeNum, { time, length } = { time: undefined, length: 5 }) {
     return this.raw({
       stop,
       route: routeNum,
-      date,
+      time,
       length,
       type: 'day',
     }).then(results =>
