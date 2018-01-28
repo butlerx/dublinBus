@@ -9,7 +9,7 @@ export default function get(endpoint, args) {
     uri: `${url}/${endpoint}?${args}&format=json`,
     json: true,
   }).then(({ results }) => {
-    if (results.length === 0) throw new Error("Stop number doesn't exist.");
+    if (results.length === 0) throw new Error("Info doesn't exist.");
     return results;
   });
 }
