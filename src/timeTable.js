@@ -1,3 +1,4 @@
+/** @module DublinBus/timetable */
 import { isUndefined } from 'lodash';
 import moment from 'moment';
 import get from './get';
@@ -22,6 +23,19 @@ export default class TimeTable {
     );
   }
 
+  /**
+   * Get TimeTable for today at a stop
+   *
+   * @static
+   * @async
+   * @function day
+   * @param {number} stop The stopid
+   * @param {String} routeNum The route number
+   * @param {{time: string, length:number}} [args] time string eg: '18:00'
+   *        to filter for and length of array returned
+   *        NOTE: length is faulty on the api side
+   * @return {Promise<Array>} resolves an array of arrivals
+   */
   static day(stop, routeNum, { time, length } = { time: undefined, length: 5 }) {
     return this.raw({
       stop,
@@ -39,6 +53,16 @@ export default class TimeTable {
     );
   }
 
+  /**
+   * Get TimeTable for the week for a stop
+   *
+   * @static
+   * @async
+   * @function week
+   * @param {number} stop The stopid
+   * @param {String} route The route number
+   * @return {Promise<Array>} resolves an array of arrivals
+   */
   static week(stop, route) {
     return this.raw({ stop, route, type: 'week' }).then(results =>
       results.map(({ startdayofweek, enddayofweek, destination, departures }) => ({
