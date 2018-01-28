@@ -10,14 +10,6 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     'no-use-before-define': ['error', { functions: false }],
-    'no-shadow': [
-      'error',
-      {
-        builtinGlobals: true,
-        hoist: 'functions',
-        allow: ['resolve', 'reject', 'err'],
-      },
-    ],
     'consistent-return': 0,
   },
 };
