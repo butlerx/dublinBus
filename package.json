@@ -36,6 +36,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
     "husky": "^0.14.3",
+    "json-server": "^0.12.1",
     "lint-staged": "^4.0.1",
     "prettier-eslint-cli": "^4.1.1"
   },

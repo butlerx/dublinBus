@@ -1,10 +1,10 @@
 import request from 'request-promise-native';
-import { url } from './config';
+import { url, agent } from './config';
 
-export default (endpoint, args) =>
+export default async (endpoint, args) =>
   request({
     headers: {
-      'User-Agent': 'dublin-bus.js',
+      'User-Agent': agent,
     },
     uri: `${url}/${endpoint}?${args}&format=json`,
     json: true,
