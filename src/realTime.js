@@ -1,4 +1,5 @@
-import { isUndefined } from 'lodash';
+import { isUndefined, flatten } from 'lodash';
+import moment from 'moment';
 import get from './get';
 
 export default class RealTime {
@@ -18,23 +19,25 @@ export default class RealTime {
       operator,
       additionalinformation,
     }) => ({
-      route: parseInt(route, 10),
-      expected: new Date(arrivaldatetime),
+      route,
+      expected: moment(arrivaldatetime, 'DD/MM/YYYY HH:mm:ss').toDate(),
       due: parseInt(duetime, 10),
       destination,
       origin,
       operator,
       info: additionalinformation,
     });
-    if (isUndefined(routes)) return this.raw({ stop, length }).then(results => results.map(format));
-    const buses = [].concat(
-      Promise.all(
-        routes.map(route => this.raw({ stop, route, length }).then(results => results.map(format))),
-      ),
-    );
-    // eslint-disable-next-line no-nested-ternary
-    buses.sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
-    return buses.slice(0, length || 20);
+    if (isUndefined(routes)) {
+      return this.raw({ stop, length }).then(results => results.map(format));
+    }
+    return Promise.all(
+      routes.map(route => this.raw({ stop, route, length }).then(results => results.map(format))),
+    ).then(results => {
+      const buses = flatten(results);
+      // eslint-disable-next-line no-nested-ternary
+      buses.sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
+      return buses.slice(0, length || 20);
+    });
   }
 
   static next(stop) {

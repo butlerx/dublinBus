@@ -1,8 +1,8 @@
 import get from './get';
 import realTime from './realTime';
-import stopLib from './stop';
+import stop from './stop';
 import timetable from './timeTable';
-import routeLib from './route';
+import route from './route';
 
 export default class DublinBus {
   static get realTime() {
@@ -10,7 +10,7 @@ export default class DublinBus {
   }
 
   static get stop() {
-    return stopLib;
+    return stop;
   }
 
   static get timetable() {
@@ -18,10 +18,16 @@ export default class DublinBus {
   }
 
   static get route() {
-    return routeLib;
+    return route.info;
   }
 
   static get operators() {
-    return get('operatorinformation', '');
+    return get('operatorinformation', '').then(opers =>
+      opers.map(({ operatorreference, operatorname, operatordescription }) => ({
+        reference: operatorreference,
+        name: operatorname,
+        description: operatordescription,
+      })),
+    );
   }
 }
