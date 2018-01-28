@@ -1,20 +1,55 @@
+import { isUndefined } from 'lodash';
 import get from './get';
+import realTime from './realTime';
 
-const getInfoRaw = stopNum => get('busstopinformation', stopNum);
+export default class Stop {
+  static async raw(stopNum) {
+    if (isUndefined(stopNum)) throw new Error('Please supply a stop number.');
+    return get('busstopinformation', `stopid=${stopNum}`);
+  }
 
-const getInfo = stopNum =>
-  getInfoRaw(stopNum).then(results => ({
-    address: results[0].fullname,
-    buses  : results[0].operators.routes,
-  }));
+  static info(stopNum) {
+    return this.raw(stopNum).then(results => ({
+      address: results[0].fullname,
+      buses: results[0].operators.reduce((a, { routes }) => a.concat(routes), []),
+      latitude: results[0].latitude,
+      longitude: results[0].longitude,
+      operators: results[0].operators,
+    }));
+  }
 
-const getAddress = stopNum => getInfoRaw(stopNum).then(results => results[0].fullname);
+  static address(stopNum) {
+    return this.raw(stopNum).then(results => results[0].fullname);
+  }
 
-const getBuses = stopNum => getInfoRaw(stopNum).then(results => results[0].operators.routes);
+  static buses(stopNum) {
+    return this.raw(stopNum).then(results =>
+      results[0].operators.reduce((a, { routes }) => a.concat(routes), []),
+    );
+  }
 
-export default {
-  getInfoRaw,
-  getInfo,
-  getAddress,
-  getBuses,
-};
+  static async realtime({ stop, length }) {
+    try {
+      return {
+        stop: await this.address(stop),
+        buses: await realTime.info({ stop, length }),
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async search(stop) {
+    if (isUndefined(stop)) throw new Error('Please supply a search');
+    return get('busstopinformation', `stopname=${stop}`).then(stops =>
+      stops.map(result => ({
+        stopNum: result.stopid,
+        address: result.fullname,
+        buses: result.operators.reduce((a, { routes }) => a.concat(routes), []),
+        latitude: result.latitude,
+        longitude: result.longitude,
+        operators: result.operators,
+      })),
+    );
+  }
+}

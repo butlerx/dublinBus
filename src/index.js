@@ -1,34 +1,33 @@
+import get from './get';
 import realTime from './realTime';
-import stopLib from './stop';
+import stop from './stop';
+import timetable from './timeTable';
+import route from './route';
 
-const getStopInfo = (stopNum, length) =>
-  realTime.getInfo(stopNum, length).then(buses =>
-    stopLib.getInfo(stopNum).then(({ address }) => ({
-      stop: address,
-      buses,
-    })),
-  );
+export default class DublinBus {
+  static get realTime() {
+    return realTime;
+  }
 
-const getStopInfoForBuses = (stopNum, busNums) =>
-  getStopInfo(Number(stopNum), 20).then(({ stop, buses }) => {
-    const filteredBuses = buses.filter(({ route }) => busNums.map(Number).includes(route));
-    if (Array.isArray(filteredBuses) && filteredBuses.length) {
-      return { stop, buses: filteredBuses };
-    }
-    throw new Error('No buses for specified routes at this stop');
-  });
+  static get stop() {
+    return stop;
+  }
 
-const getBusesInfo = (stopNum, busNums) =>
-  getStopInfoForBuses(stopNum, busNums).then(({ buses }) => buses);
+  static get timetable() {
+    return timetable;
+  }
 
-export default {
-  getStopInfo,
-  getBusesInfo,
-  getStopInfoForBuses,
-  realTime   : realTime.getInfo,
-  realTimeRaw: realTime.getInfoRaw,
-  stopInfo   : stopLib.getInfo,
-  stopInfoRaw: stopLib.getInfoRaw,
-  stopAddress: stopLib.getAddress,
-  stopBuses  : stopLib.getBuses,
-};
+  static get route() {
+    return route.info;
+  }
+
+  static get operators() {
+    return get('operatorinformation', '').then(opers =>
+      opers.map(({ operatorreference, operatorname, operatordescription }) => ({
+        reference: operatorreference,
+        name: operatorname,
+        description: operatordescription,
+      })),
+    );
+  }
+}
