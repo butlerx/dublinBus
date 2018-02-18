@@ -8,6 +8,10 @@ Node Library for getting Dublin bus read time info
 yarn add dublin-bus.js
 ```
 
+## API
+
+Read [API](./api.md) to see all functions
+
 ## Example
 
 ```javascript

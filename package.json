@@ -16,9 +16,9 @@
     "lint": "eslint src",
     "build": "babel src --source-maps --out-dir lib",
     "build:watch": "babel src --watch --source-maps --out-dir lib",
-    "precommit": "yarn docs && git add docs.md && lint-staged ",
+    "precommit": "yarn docs && git add API.md && lint-staged ",
     "prepublish": "yarn build",
-    "docs": "jsdoc2md --configure jsdoc.json src/**/*.js>docs.md"
+    "docs": "jsdoc2md --configure jsdoc.json src/**/*.js >API.md"
   },
   "lint-staged": {
     "*.js": [
