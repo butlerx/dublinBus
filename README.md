@@ -4,7 +4,7 @@ Node Library for getting Dublin bus read time info
 
 ## Installation
 
-``` bash
+```bash
 yarn add dublin-bus.js
 ```
 

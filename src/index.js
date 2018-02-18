@@ -1,5 +1,6 @@
 /** @module DublinBus */
 
+import 'babel-polyfill';
 import get from './get';
 import realTime from './realTime';
 import stop from './stop';

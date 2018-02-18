@@ -5,8 +5,8 @@ import { url, agent } from './config';
  * Query dublin bus api
  * @module DublinBus/get
  * @async
- * @param {String} endpoint endpooint to query
- * @param {String} args the arguemtents for that api in the format `stopid=1344&routeid=16`
+ * @param {string} endpoint endpooint to query
+ * @param {string} args the arguemtents for that api in the format `stopid=1344&routeid=16`
  * @return {Promise<object>} resolves api object
  */
 export default async (endpoint, args) =>

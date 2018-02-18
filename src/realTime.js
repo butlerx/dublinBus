@@ -24,8 +24,10 @@ const format = ({
 export default class RealTime {
   static async raw({ stop, route, length }) {
     if (isUndefined(stop)) throw new Error('Please supply a stop number.');
-    const filter = isUndefined(route) ? '' : `&routeid=${route}`;
-    return get('realtimebusinformation', `stopid=${stop}${filter}&maxresults=${length || 5}`);
+    return get(
+      'realtimebusinformation',
+      `stopid=${stop}${isUndefined(route) ? '' : `&routeid=${route}`}&maxresults=${length || 5}`,
+    );
   }
 
   /**
@@ -44,12 +46,12 @@ export default class RealTime {
     }
     return Promise.all(
       routes.map(route => this.raw({ stop, route, length }).then(results => results.map(format))),
-    ).then(results => {
-      const buses = flatten(results);
-      // eslint-disable-next-line no-nested-ternary
-      buses.sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
-      return buses.slice(0, length || 20);
-    });
+    ).then(results =>
+      flatten(results)
+        // eslint-disable-next-line no-nested-ternary
+        .sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0))
+        .slice(0, length || 20),
+    );
   }
 
   /**
