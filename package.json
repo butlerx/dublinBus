@@ -13,38 +13,42 @@
     "url": "http://github.com/butlerx/dublinBus/issues"
   },
   "scripts": {
-    "lint": "eslint src",
-    "build": "babel src --source-maps --out-dir lib",
-    "build:watch": "babel src --watch --source-maps --out-dir lib",
-    "precommit": "lint-staged",
-    "prepublish": "yarn run build",
-    "format": "prettier-eslint --write src/**/*.js"
+    "lint": "eslint --ext .js,.ts src",
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "yarn run build",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.js": [
-      "prettier-eslint --write",
+    "*.{js,ts}": [
+      "eslint --fix",
       "git add"
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.0.2",
-    "eslint-plugin-import": "^2.6.1",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0",
-    "husky": "^0.14.3",
-    "json-server": "^0.12.1",
-    "lint-staged": "^4.0.1",
-    "prettier-eslint-cli": "^4.1.1"
+    "@types/lodash": "^4.14.119",
+    "@types/node": "^10.12.18",
+    "@types/request-promise": "^4.1.42",
+    "@types/request-promise-native": "^1.0.15",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-typescript": "^1.0.0-rc.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.16.0",
+    "typescript": "~3.1.1"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
-    "request": "^2.81.0",
-    "request-promise-native": "^1.0.4"
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
   }
 }
